@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+  
+      .main{display:flex; flex-wrap:wrap; overflow: scrollY;}
+      .main>div{
+          margin:5px; border:2px solid black;
+          width:300px; height:300px;
+      }
+    
+</style>
+</head>
+<body>
+
+    <div class='main' id='parent'>
+
+    </div>
+    
+</body>
+
+
+<script>
+var page=1;
+
+  window.addEventListener('scroll',()=>{
+      if(window.scrollY+window.innerHeight>=document.documentElement.scrollHeight){
+         page=page+1
+         getdata(page)
+      }
+  })   
+
+
+    const getdata=async(page)=>{
+
+      try{
+
+       const res=await fetch(`http://localhost:3001/users?_page=${page}&_limit=33`)
+         
+       data=await res.json()
+       console.log(data)
+       showdata(data)
+       window.scrollTo(0, 0);
+      }
+      catch(err){
+          console.log(err,"I am error")
+      }
+
+
+    }
+
+
+
+    getdata(page)
+
+
+
+
+const parent=document.getElementById('parent')
+    function showdata(arr){
+        parent.innerHTML=null;
+       arr.forEach(element => {
+            div=document.createElement('div');
+            p1=document.createElement('p');
+            p1.innerText=element.gender;
+            p2=document.createElement('p');
+            p2.innerText=element.last_name;
+            p4=document.createElement('p');
+            p4.innerText=element.first_name;
+            p3=document.createElement('p')
+            p3.innerText=element.email;
+            div.append(p1,p4,p2,p3);
+            parent.append(div)
+           
+       });
+
+       
+    }
+</script>
+</html>
